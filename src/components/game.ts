@@ -15,7 +15,7 @@ export default class Game {
         this._canvas = document.querySelector(canvasElement) as HTMLCanvasElement;
         this._engine = new BABYLON.Engine(this._canvas, true, {}, true);
         this._scene = new BABYLON.Scene(this._engine);
-        new FPSMonitor(this._scene);
+        // new FPSMonitor(this._scene);
         this.createBasicEnv();
     }
 
@@ -27,8 +27,12 @@ export default class Game {
         // 创建灯光
         new BABYLON.HemisphericLight('hLight', new BABYLON.Vector3(-1, -1, -1), this._scene);
         const lightPos = new BABYLON.Vector3(5, 5, 5);
-        const spotLight = new BABYLON.SpotLight('sLight', lightPos, new BABYLON.Vector3(0, -1, 0), Math.PI / 2, 20, this._scene);
-        const spotLightMesh = BABYLON.MeshBuilder.CreateSphere('lightMesh', { diameter: 0.2 }, this._scene);
+        const spotLight = new BABYLON.SpotLight('sLight', lightPos, new BABYLON.Vector3(0, -1, 0), Math.PI, 30, this._scene);
+        // spotLight.diffuse = BABYLON.Color3.Green();
+        const spotLightMesh = BABYLON.MeshBuilder.CreateSphere('lightMesh', { diameter: 0.8 }, this._scene);
+        const mat = new BABYLON.StandardMaterial('mat', this._scene);
+        mat.wireframe = true;
+        spotLightMesh.material = mat
         spotLightMesh.position = lightPos;
 
         // Create Camera
@@ -58,7 +62,6 @@ export default class Game {
             this._engine.loadingUIText = 'We are loading the scene. ' + remainingCount + ' out of ' + totalCount + ' items still need to be loaded.';
         });
         assetsManager.load();
-        
         // Create Ground from HeightMap
         // 通过高度贴图创建地面
         const groundMat = new BABYLON.StandardMaterial('ground-material', this._scene);
@@ -79,22 +82,26 @@ export default class Game {
         // Light Animation
         // 灯光动画
         let alpha = 0;
+        let green = false;
         this._scene.onBeforeRenderObservable.add(() => {
             alpha += 0.01;
             const pos = new BABYLON.Vector3(
-                Math.cos(alpha),
-                5,
-                Math.sin(alpha)
+                Math.sin(alpha),
+                3,
+                Math.cos(alpha)
             );
             spotLight.position = pos;
             spotLightMesh.position = pos;
         });
-
+        setInterval(() => {
+            green = !green;
+            spotLight.diffuse = green? BABYLON.Color3.Green() : BABYLON.Color3.Red();
+        }, 130)
     }
 
     // do render loop and auto-resize
     // 循环以及自适应
-    doRender(): void {
+    render(): void {
         this._engine.runRenderLoop(() => {
             this._scene.render();
         });

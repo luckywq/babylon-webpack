@@ -15,7 +15,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 import './styles/index.scss';
 import 'pepjs';
-import Learn from './components/13.raycats';
+import Learn from './components/euler';
 window.addEventListener('DOMContentLoaded', () => {
     const learn = new Learn('#renderCanvas');
     learn.render();

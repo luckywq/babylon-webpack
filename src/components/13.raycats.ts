@@ -58,6 +58,7 @@ export default class Learn{
             this.meshes.forEach(mesh => {
 
                 if (mesh.name.includes('main')) {
+                    // console.log(mesh.getBoundingInfo())
                     mesh.material = this.scene.getMaterialByName('main');
                     if (mesh.name.includes('room-1')) {
                         mesh.material = this.scene.getMaterialByName('room');

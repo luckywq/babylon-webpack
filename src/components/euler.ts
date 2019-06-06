@@ -38,7 +38,7 @@ export default class Learn{
         var quat2 = new BABYLON.Quaternion(0,0,0,1);
         this.eulerToQuaternion(v3,quat2);
         // box2.rotationQuaternion = quat2;
-        box2.rotationQuaternion = BABYLON.Quaternion.FromArray([-0.08490338470130929, 0.5504358912246221, 0.22595804652311344, 0.7992213123593966]);
+        box2.rotationQuaternion = BABYLON.Quaternion.FromArray([0.7810967629738546, -0.13224625393848985, -0.5776512966286269, -0.1967682766460811]);
         this.initControl(box2);
 
         window.addEventListener('keydown', (e) => {
@@ -59,7 +59,7 @@ export default class Learn{
     }
 
     private initControl (box: BABYLON.Mesh) {
-        const gizmo = new BABYLON.RotationGizmo(this._utilLayer);
+        const gizmo = new BABYLON.ScaleGizmo(this._utilLayer);
         gizmo.updateGizmoRotationToMatchAttachedMesh = false;
         gizmo.updateGizmoPositionToMatchAttachedMesh = true;
         gizmo.attachedMesh = box;

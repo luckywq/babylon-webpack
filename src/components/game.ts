@@ -26,7 +26,7 @@ export default class Game {
         // Create Lights
         // 创建灯光
         new BABYLON.HemisphericLight('hLight', new BABYLON.Vector3(-1, -1, -1), this._scene);
-        const lightPos = new BABYLON.Vector3(5, 5, 5);
+        const lightPos = new BABYLON.Vector3(5, 20, 5);
         const spotLight = new BABYLON.SpotLight('sLight', lightPos, new BABYLON.Vector3(0, -1, 0), Math.PI, 30, this._scene);
         // spotLight.diffuse = BABYLON.Color3.Green();
         const spotLightMesh = BABYLON.MeshBuilder.CreateSphere('lightMesh', { diameter: 0.8 }, this._scene);
@@ -84,11 +84,11 @@ export default class Game {
         let alpha = 0;
         let green = false;
         this._scene.onBeforeRenderObservable.add(() => {
-            alpha += 0.01;
+            alpha += 0.03;
             const pos = new BABYLON.Vector3(
-                Math.sin(alpha),
-                3,
-                Math.cos(alpha)
+                Math.sin(alpha) * 2,
+                6,
+                Math.cos(alpha) * 2
             );
             spotLight.position = pos;
             spotLightMesh.position = pos;

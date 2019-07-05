@@ -32,6 +32,52 @@ export default class TestFactory {
         this._frame.addEventListener('load', () => {
             const window = this._frame.contentWindow as Window;
             window.postMessage(msg, '*');
+            if(msg.type === 3) {
+                let a = false;
+                setInterval(() => {
+                    a = !a;
+                    /**
+                     *handle
+                     1: showlabel
+                     2. hidelabel
+                     3. updateTxt
+                     4. color
+                    */
+                    window.postMessage({
+                        type: 5,
+                        handle: a ? 1 : 2,
+                        mesh: 'add__arrow_blue'
+                    }, '*');
+
+                    window.postMessage({
+                        type: 5,
+                        handle: 4,
+                        mesh: 'add__exchanger',
+                        data: a? '#ffff00' : '#00cccc'
+                    }, '*');
+                    window.postMessage({
+                        type: 5,
+                        handle: 3,
+                        mesh: 'add__arrow_blue-2',
+                        data: a ? [
+                            {
+                                text: '温度\xa0\xa0\xa0\xa020℃',
+                            },
+                            {
+                                text: '温度\xa0\xa0\xa0\xa030%',
+                            }
+                        ] : [
+                            {
+                                text: '温度\xa0\xa0\xa0\xa030℃',
+                            },
+                            {
+                                text: '温度\xa0\xa0\xa0\xa040%',
+                                color: 'green'
+                            }
+                        ]
+                    }, '*');
+                }, 3000)
+            }
         })
     }
 
@@ -53,6 +99,7 @@ export default class TestFactory {
                                 },
                                 {
                                     text: '温度\xa0\xa0\xa0\xa030%',
+                                    color: 'green'
                                 }
                             ]
                         },
@@ -61,6 +108,12 @@ export default class TestFactory {
 
                 const window = this._frame.contentWindow as Window;
                 window.postMessage(msg, '*');
+            }
+
+            if(e.data.bind) {
+                alert(e.data.scada_id);
+                //e.data.scada_id
+                // 业务系统需要将这个scada_id 绑定到当前配置组态的对象上。比如数据库关联
             }
         })
     }

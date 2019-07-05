@@ -30,36 +30,46 @@ export default class Learn{
 
     private create() {
         const box2 = BABYLON.Mesh.CreateBox('box',1,this.scene);
+        box2.position.y = -1;
         const mat2 = new BABYLON.StandardMaterial('mat',this.scene);
         mat2.diffuseColor = new BABYLON.Color3(1,0,1);
+        box2.material = mat2;
 
+        const box = BABYLON.Mesh.CreateBox('box',1,this.scene);
+        box2.material = mat2;
+        box.position.y = 1;
+
+        // box2.reIntegrateRotationIntoRotationQuaternion = false;
 
         var v3 = new BABYLON.Vector3(1,1,1);
         var quat2 = new BABYLON.Quaternion(0,0,0,1);
-        this.eulerToQuaternion(v3,quat2);
+        // this.eulerToQuaternion(v3,quat2);
         // box2.rotationQuaternion = quat2;
-        box2.rotationQuaternion = BABYLON.Quaternion.FromArray([0.7810967629738546, -0.13224625393848985, -0.5776512966286269, -0.1967682766460811]);
+        // box2.rotationQuaternion = BABYLON.Quaternion.FromArray([0,0,0,1]);
         this.initControl(box2);
 
         window.addEventListener('keydown', (e) => {
             // console.log(e.keyCode);
-            if(e.keyCode === 87) {
-                box2.rotation.x += 0.01;
-            }
-            if(e.keyCode === 83) {
-                box2.rotation.x -= 0.01;
+
+            if(e.keyCode === 32) {
+                box2.rotation.x += 0.1;   
+                box2.rotation.y += 0.1;
+                box2.rotation.z += 0.1;
             }
 
             if(e.keyCode === 13) {
                 console.log(box2.rotation);
                 //@ts-ignore
-                console.log(box2.rotationQuaternion.asArray());
+                // console.log(box2.rotationQuaternion.asArray());
+                // const rota = this.quaternionToEuler(box2.rotationQuaternion);
+                const r = box2.rotation;
+                box.rotation = r;
             }
         })
     }
 
     private initControl (box: BABYLON.Mesh) {
-        const gizmo = new BABYLON.ScaleGizmo(this._utilLayer);
+        const gizmo = new BABYLON.RotationGizmo(this._utilLayer);
         gizmo.updateGizmoRotationToMatchAttachedMesh = false;
         gizmo.updateGizmoPositionToMatchAttachedMesh = true;
         gizmo.attachedMesh = box;
@@ -69,7 +79,7 @@ export default class Learn{
         return Math.max( min, Math.min( max, value )  );
     }
     //@ts-ignore
-    private quaternionToEuler(q,euler){
+    private quaternionToEuler(q){
         var x = q.x, y = q.y, z = q.z, w = q.w;
         var x2 = x + x, y2 = y + y, z2 = z + z;
         var xx = x * x2, xy = x * y2, xz = x * z2;
@@ -87,6 +97,7 @@ export default class Learn{
         var te2 = xz - wy;
         var te6 = yz + wx;
         var te10 = 1 - ( xx + yy );
+        const euler = new BABYLON.Vector3();
 
         euler.y = Math.asin( this.clamp(te8, - 1, 1 ) );
 
@@ -99,6 +110,8 @@ export default class Learn{
             euler.x = Math.atan2( te6, te5 );
             euler.z = 0;
         }
+
+        return euler;
     }
     // @ts-ignore
     private eulerToQuaternion(euler,qt){

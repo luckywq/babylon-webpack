@@ -83,7 +83,7 @@ export default class Game {
         // 灯光动画
         let alpha = 0;
         let green = false;
-        this._scene.onBeforeRenderObservable.add(() => {
+        this._scene.onAfterRenderObservable.add(() => {
             alpha += 0.03;
             const pos = new BABYLON.Vector3(
                 Math.sin(alpha) * 2,
